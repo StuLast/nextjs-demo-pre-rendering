@@ -2,8 +2,6 @@ import { Fragment } from "react"
 import fs from 'fs/promises';
 import path from 'path';
 
-
-
 const ProductDetailPage = (props) => {
   const { product } = props;
 
