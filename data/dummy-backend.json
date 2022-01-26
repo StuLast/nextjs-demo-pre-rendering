@@ -11,6 +11,7 @@
     { "id": "p9", "title": "Product 9", "description": "This is product 9" },
     { "id": "p10", "title": "Product 10", "description": "This is product 10" },
     { "id": "p11", "title": "Product 11", "description": "This is product 11" },
-    { "id": "p12", "title": "Product 12", "description": "This is product 12" }
+    { "id": "p12", "title": "Product 12", "description": "This is product 12" },
+    { "id": "p13", "title": "Product 13", "description": "This is product 13" }
   ]
 }
