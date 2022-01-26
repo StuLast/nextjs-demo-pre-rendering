@@ -2,6 +2,8 @@ import { Fragment } from "react"
 import fs from 'fs/promises';
 import path from 'path';
 
+
+
 const ProductDetailPage = (props) => {
   const { product } = props;
 
@@ -21,27 +23,40 @@ const ProductDetailPage = (props) => {
   );
 };
 
+const getProductData = async () => {
+  const fileName = 'dummy-backend.json'
+  const filePath = path.join(process.cwd(), 'data', fileName);
+  const jsonData = await fs.readFile(filePath);
+  const data = JSON.parse(jsonData);
+  return data;
+}
+
 export const getStaticPaths = async () => {
+  const data = await getProductData();
+
+  const paths = data.products
+    .filter((_, key) => key < 6)
+    .map(product => ({ params: { pid: product.id } }));
 
   return {
-    paths: [
-      { params: { pid: 'p1' } },
-      { params: { pid: 'p2' } },
-      { params: { pid: 'p3' } },
-    ],
-    fallback: true
+    paths,
+    fallback: true,  //shows "loading... until data is recovered.  use 'blocking' to hold back serving page until data is processed"
   }
 }
 
 export const getStaticProps = async (context) => {
   const { params } = context;
   const productId = params.pid;
+  const data = await getProductData();
 
-  const fileName = 'dummy-backend.json'
-  const filePath = path.join(process.cwd(), 'data', fileName);
-  const jsonData = await fs.readFile(filePath);
-  const data = JSON.parse(jsonData);
   const product = data.products.find(product => product.id === productId);
+
+  if (!product) {
+    return {
+      notFound: true,
+      revalidate: 10
+    }
+  }
 
   return {
     props: {
@@ -49,7 +64,6 @@ export const getStaticProps = async (context) => {
     },
     revalidate: 10
   }
-
 }
 
-export default ProductDetailPage
+export default ProductDetailPage;
